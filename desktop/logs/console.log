@@ -1,0 +1,60 @@
+2014-Dec-02 17:55:40:322 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.dal.HostDataAccessLayerImpl  - Contruct
+2014-Dec-02 17:55:40:330 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.dal.HostDataAccessLayerImpl  - create host
+2014-Dec-02 17:55:40:339 [LWJGL Application] INFO  vn.edu.hust.student.dynamicpool.dal.controller.HostMainController  - Reading config file from path conf/server.xml
+2014-Dec-02 17:55:41:068 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.dal.client.http.HttpClient  - Sending 'GET' request to URL : http://104.131.13.155:8990/dp_reghost?port=9696&iplan=192.168.17.157
+2014-Dec-02 17:55:41:074 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.dal.client.http.HttpClient  - HTTP RESPONSE: 200 - {"error":null,"key":"5839","ip":"113.190.242.151"}
+2014-Dec-02 17:55:41:075 [LWJGL Application] INFO  vn.edu.hust.student.dynamicpool.dal.client.socket.SocketClientController  - Connect socket to server 104.131.13.155, 2225
+2014-Dec-02 17:55:41:337 [LWJGL Application] INFO  vn.edu.hust.student.dynamicpool.dal.client.socket.SocketClientController  - Socket Client Start Sucessfully
+2014-Dec-02 17:55:41:344 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.dal.controller.HostMainController  - Starting Puppet Server.........
+2014-Dec-02 17:55:41:365 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.dal.controller.HostMainController  - Puppet Server Started Successfully
+2014-Dec-02 17:55:41:365 [LWJGL Application] INFO  vn.edu.hust.student.dynamicpool.dal.HostDataAccessLayerImpl  - create host success with key: 5839
+2014-Dec-02 17:55:41:377 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.bll.HostBusinessLogicLayerImpl  - on create host callback hander
+2014-Dec-02 17:55:41:377 [LWJGL Application] INFO  vn.edu.hust.student.dynamicpool.bll.HostBusinessLogicLayerImpl  - create host success
+2014-Dec-02 17:57:50:468 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.dal.HostDataAccessLayerImpl  - Contruct
+2014-Dec-02 17:57:50:479 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.dal.HostDataAccessLayerImpl  - create host
+2014-Dec-02 17:57:50:489 [LWJGL Application] INFO  vn.edu.hust.student.dynamicpool.dal.controller.HostMainController  - Reading config file from path conf/server.xml
+2014-Dec-02 17:57:51:211 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.dal.client.http.HttpClient  - Sending 'GET' request to URL : http://104.131.13.155:8990/dp_reghost?port=9696&iplan=192.168.17.157
+2014-Dec-02 17:57:51:217 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.dal.client.http.HttpClient  - HTTP RESPONSE: 200 - {"error":null,"key":"2127","ip":"113.190.242.151"}
+2014-Dec-02 17:57:51:219 [LWJGL Application] INFO  vn.edu.hust.student.dynamicpool.dal.client.socket.SocketClientController  - Connect socket to server 104.131.13.155, 2225
+2014-Dec-02 17:57:51:490 [LWJGL Application] INFO  vn.edu.hust.student.dynamicpool.dal.client.socket.SocketClientController  - Socket Client Start Sucessfully
+2014-Dec-02 17:57:51:492 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.dal.controller.HostMainController  - Starting Puppet Server.........
+2014-Dec-02 17:57:51:513 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.dal.controller.HostMainController  - Puppet Server Started Successfully
+2014-Dec-02 17:57:51:514 [LWJGL Application] INFO  vn.edu.hust.student.dynamicpool.dal.HostDataAccessLayerImpl  - create host success with key: 2127
+2014-Dec-02 17:57:51:517 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.bll.HostBusinessLogicLayerImpl  - on create host callback hander
+2014-Dec-02 17:57:51:517 [LWJGL Application] INFO  vn.edu.hust.student.dynamicpool.bll.HostBusinessLogicLayerImpl  - create host success
+2014-Dec-02 18:06:25:797 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.dal.HostDataAccessLayerImpl  - Contruct
+2014-Dec-02 18:06:25:804 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.dal.HostDataAccessLayerImpl  - create host
+2014-Dec-02 18:06:25:812 [LWJGL Application] INFO  vn.edu.hust.student.dynamicpool.dal.controller.HostMainController  - Reading config file from path conf/server.xml
+2014-Dec-02 18:06:26:508 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.dal.client.http.HttpClient  - Sending 'GET' request to URL : http://104.131.13.155:8990/dp_reghost?port=9696&iplan=192.168.17.157
+2014-Dec-02 18:06:26:514 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.dal.client.http.HttpClient  - HTTP RESPONSE: 200 - {"error":null,"key":"0315","ip":"118.70.128.45"}
+2014-Dec-02 18:06:26:515 [LWJGL Application] INFO  vn.edu.hust.student.dynamicpool.dal.client.socket.SocketClientController  - Connect socket to server 104.131.13.155, 2225
+2014-Dec-02 18:06:26:781 [LWJGL Application] INFO  vn.edu.hust.student.dynamicpool.dal.client.socket.SocketClientController  - Socket Client Start Sucessfully
+2014-Dec-02 18:06:26:783 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.dal.controller.HostMainController  - Starting Puppet Server.........
+2014-Dec-02 18:06:26:803 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.dal.controller.HostMainController  - Puppet Server Started Successfully
+2014-Dec-02 18:06:26:803 [LWJGL Application] INFO  vn.edu.hust.student.dynamicpool.dal.HostDataAccessLayerImpl  - create host success with key: 0315
+2014-Dec-02 18:06:26:807 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.bll.HostBusinessLogicLayerImpl  - on create host callback hander
+2014-Dec-02 18:06:26:807 [LWJGL Application] INFO  vn.edu.hust.student.dynamicpool.bll.HostBusinessLogicLayerImpl  - create host success
+2014-Dec-02 18:08:30:840 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.dal.HostDataAccessLayerImpl  - Contruct
+2014-Dec-02 18:08:30:848 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.dal.HostDataAccessLayerImpl  - create host
+2014-Dec-02 18:08:30:857 [LWJGL Application] INFO  vn.edu.hust.student.dynamicpool.dal.controller.HostMainController  - Reading config file from path conf/server.xml
+2014-Dec-02 18:08:31:598 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.dal.client.http.HttpClient  - Sending 'GET' request to URL : http://104.131.13.155:8990/dp_reghost?port=9696&iplan=192.168.17.157
+2014-Dec-02 18:08:31:604 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.dal.client.http.HttpClient  - HTTP RESPONSE: 200 - {"error":null,"key":"8338","ip":"118.70.128.45"}
+2014-Dec-02 18:08:31:605 [LWJGL Application] INFO  vn.edu.hust.student.dynamicpool.dal.client.socket.SocketClientController  - Connect socket to server 104.131.13.155, 2225
+2014-Dec-02 18:08:31:859 [LWJGL Application] INFO  vn.edu.hust.student.dynamicpool.dal.client.socket.SocketClientController  - Socket Client Start Sucessfully
+2014-Dec-02 18:08:31:861 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.dal.controller.HostMainController  - Starting Puppet Server.........
+2014-Dec-02 18:08:31:881 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.dal.controller.HostMainController  - Puppet Server Started Successfully
+2014-Dec-02 18:08:31:881 [LWJGL Application] INFO  vn.edu.hust.student.dynamicpool.dal.HostDataAccessLayerImpl  - create host success with key: 8338
+2014-Dec-02 18:08:31:884 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.bll.HostBusinessLogicLayerImpl  - on create host callback hander
+2014-Dec-02 18:08:31:884 [LWJGL Application] INFO  vn.edu.hust.student.dynamicpool.bll.HostBusinessLogicLayerImpl  - create host success
+2014-Dec-02 18:23:24:562 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.dal.HostDataAccessLayerImpl  - Contruct
+2014-Dec-02 18:23:24:572 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.dal.HostDataAccessLayerImpl  - create host
+2014-Dec-02 18:23:24:579 [LWJGL Application] INFO  vn.edu.hust.student.dynamicpool.dal.controller.HostMainController  - Reading config file from path conf/server.xml
+2014-Dec-02 18:23:25:272 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.dal.client.http.HttpClient  - Sending 'GET' request to URL : http://104.131.13.155:8990/dp_reghost?port=9696&iplan=192.168.17.157
+2014-Dec-02 18:23:25:281 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.dal.client.http.HttpClient  - HTTP RESPONSE: 200 - {"error":null,"key":"8309","ip":"113.190.242.151"}
+2014-Dec-02 18:23:25:282 [LWJGL Application] INFO  vn.edu.hust.student.dynamicpool.dal.client.socket.SocketClientController  - Connect socket to server 104.131.13.155, 2225
+2014-Dec-02 18:23:25:543 [LWJGL Application] INFO  vn.edu.hust.student.dynamicpool.dal.client.socket.SocketClientController  - Socket Client Start Sucessfully
+2014-Dec-02 18:23:25:545 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.dal.controller.HostMainController  - Starting Puppet Server.........
+2014-Dec-02 18:23:25:566 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.dal.controller.HostMainController  - Puppet Server Started Successfully
+2014-Dec-02 18:23:25:566 [LWJGL Application] INFO  vn.edu.hust.student.dynamicpool.dal.HostDataAccessLayerImpl  - create host success with key: 8309
+2014-Dec-02 18:23:25:569 [LWJGL Application] DEBUG vn.edu.hust.student.dynamicpool.bll.HostBusinessLogicLayerImpl  - on create host callback hander
+2014-Dec-02 18:23:25:570 [LWJGL Application] INFO  vn.edu.hust.student.dynamicpool.bll.HostBusinessLogicLayerImpl  - create host success
