@@ -11,12 +11,15 @@ import vn.edu.hust.student.dynamicpool.bll.model.Segment;
 
 public class FindCommonEdgeFunction {
 	public static List<Pool> calucalteCommonEdge(List<Pool> pools) {
+		for (Pool pool : pools) {
+			pool.getSegments().clear();
+		}
+		
 		if (pools.size() >= 2) {
 			for (Pool pool : pools) {
 				Boundary boundary = pool.getBoundary();
 				Point pointStart = new Point(0, 0);
 				Point pointEnd = new Point(0, 0);
-
 				// right
 				System.out.println("------------Right---------------");
 				pointStart = new Point(boundary.getMinX(), boundary.getMinY());

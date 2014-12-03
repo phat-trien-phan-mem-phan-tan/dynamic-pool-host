@@ -20,12 +20,16 @@ import org.eclipse.jetty.util.ajax.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import vn.edu.hust.student.dynamicpool.dal.client.entity.Client;
 import vn.edu.hust.student.dynamicpool.dal.config.SocketServerConfig;
+import vn.edu.hust.student.dynamicpool.dal.controller.HostMainController;
 import vn.edu.hust.student.dynamicpool.dal.processor.Processor;
 import vn.edu.hust.student.dynamicpool.dal.processor.ProcessorExecutionRequest;
 import vn.edu.hust.student.dynamicpool.dal.processor.ProcessorExecutionResponse;
 import vn.edu.hust.student.dynamicpool.dal.processor.ProcessorManager;
 import vn.edu.hust.student.dynamicpool.dal.statics.Field;
+import vn.edu.hust.student.dynamicpool.events.EventDestination;
+import vn.edu.hust.student.dynamicpool.events.EventType;
 
 public class NIOSocketServerController extends SocketServerController implements
 		IoHandler {
@@ -150,6 +154,14 @@ public class NIOSocketServerController extends SocketServerController implements
 
 	@Override
 	public void sessionClosed(IoSession arg0) {
+		Client client = HostMainController.getInstance().getClientManager()
+				.find(arg0.getId());
+		if (client != null) {
+			logger.info("Dispatch client disconnect with name {}",
+					client.getClientName());
+			EventDestination.getInstance().dispatchSuccessEventWithObject(
+					EventType.DAL_CLIENT_DISCONECT, client.getClientName());
+		}
 	}
 
 	@Override

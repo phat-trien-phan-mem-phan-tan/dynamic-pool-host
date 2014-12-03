@@ -39,6 +39,7 @@ public class HostPoolManager implements PoolManager {
 		pool.getBoundary().setLocation(location);
 		pools.add(pool);
 		initTempPools(pool);
+		FindCommonEdgeFunction.calucalteCommonEdge(tempPools);
 	}
 
 	private Pool fixWidthAndHeightByDPI(Pool pool) {
