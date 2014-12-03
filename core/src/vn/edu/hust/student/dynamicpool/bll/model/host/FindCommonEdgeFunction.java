@@ -43,14 +43,14 @@ public class FindCommonEdgeFunction {
 								pointStart, pointEnd, nearPoolPointStart,
 								nearPoolPointEnd);
 						if (pointCommon != null) {
-							Segment segment = new Segment(EDirection.RIGHT,
+							Segment segment = new Segment(EDirection.LEFT,
 									pointCommon.get(0).getY(), pointCommon.get(
 											1).getY());
 							segment.setNeighbourClientName(nearPool
 									.getDeviceInfo().getClientName());
 							pool.getSegments().add(segment);
 
-							segment = new Segment(EDirection.LEFT, pointCommon
+							segment = new Segment(EDirection.RIGHT, pointCommon
 									.get(0).getY(), pointCommon.get(1).getY());
 							segment.setNeighbourClientName(pool.getDeviceInfo()
 									.getClientName());
