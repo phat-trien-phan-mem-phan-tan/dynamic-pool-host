@@ -11,7 +11,7 @@ import flexjson.JSON;
 
 public class Pool {
 	private DeviceInfo deviceInfo = new DeviceInfo();
-	public Boundary boundary = new Boundary();
+	private Boundary boundary = new Boundary();
 	private List<Segment> segments = new ArrayList<Segment>();
 	private float scale = 1;
 	@JSON(include=false)
@@ -48,7 +48,7 @@ public class Pool {
 
 	public List<Segment> getSegments() {
 		if (segments == null)
-			segments = new ArrayList<>();
+			segments = new ArrayList<Segment>();
 		return segments;
 	}
 

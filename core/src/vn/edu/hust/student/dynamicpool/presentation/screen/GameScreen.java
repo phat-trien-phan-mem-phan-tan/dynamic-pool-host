@@ -3,7 +3,7 @@ package vn.edu.hust.student.dynamicpool.presentation.screen;
 import java.util.List;
 
 import vn.edu.hust.student.dynamicpool.bll.model.Fish;
-import vn.edu.hust.student.dynamicpool.bll.model.HostPoolManager;
+import vn.edu.hust.student.dynamicpool.bll.model.host.HostPoolManager;
 import vn.edu.hust.student.dynamicpool.presentation.WorldController;
 import vn.edu.hust.student.dynamicpool.presentation.WorldRenderer;
 import vn.edu.hust.student.dynamicpool.presentation.assets.AssetGameScreen;
@@ -22,21 +22,23 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class GameScreen implements Screen {
 
-	protected WorldRenderer worldRenderer = null;
-	protected WorldController worldController = null;
-	protected SpriteBatch batch = null;
+	private WorldRenderer worldRenderer = null;
+	private WorldController worldController = null;
+	private SpriteBatch batch = null;
 	private FishUICollection fishUICollection = null;
 	private Texture exitButtonTexture;
 	private Texture addFishButtonTexture;
 	private Texture selectFishButtonsTexture;
 	private Texture selectTrajectoryButtonTexture;
-	protected InputProcessor defaultInputProcessor;
-	protected InputProcessor selectFishInputProcessor;
-	protected InputProcessor selectTrajectoryInputProcessor;
+	private InputProcessor defaultInputProcessor;
+	private InputProcessor selectFishInputProcessor;
+	private InputProcessor selectTrajectoryInputProcessor;
+	private InputProcessor settingInputProcessor;
+
 	private BitmapFont defaultFont;
 	private WidePoolUI widePoolUI;
 	ShapeRenderer shapeRenderer = new ShapeRenderer();
-	
+
 	public GameScreen(WorldRenderer worldRenderer,
 			WorldController worldController, HostPoolManager hostPoolManager) {
 		this.worldRenderer = worldRenderer;
@@ -51,29 +53,33 @@ public class GameScreen implements Screen {
 		worldRenderer.beginRender();
 		renderFishsUIAndUpdate(delta);
 		renderKey();
-		renderWidePool();
 		renderHubControl();
 		worldRenderer.endRender();
+		renderWidePool();
 	}
 
-	protected void renderFishsUIAndUpdate(float deltaTime) {
+	private void renderFishsUIAndUpdate(float deltaTime) {
 		List<Fish> fishs = worldController.getFishs();
 		for (Fish fish : fishs) {
 			renderAFishUI(fish, deltaTime);
 		}
 		worldController.updateFishsCordinate(deltaTime);
 	}
-	
+
 	private void renderKey() {
 		String key = worldController.getKey();
-		float x = AppConst.width-20-defaultFont.getBounds(key).width;
-		float y = 25+defaultFont.getBounds(key).height;
+		float x = AppConst.width - 20 - defaultFont.getBounds(key).width;
+		float y = 25 + defaultFont.getBounds(key).height;
 		defaultFont.draw(batch, key, x, y);
 	}
-	
+
 	private void renderWidePool() {
 		shapeRenderer.setProjectionMatrix(worldRenderer.getCamera().combined);
-		widePoolUI.draw(this.shapeRenderer);
+		if (worldController.isShowingSetting()) {
+			widePoolUI.drawSetting(this.shapeRenderer);
+		} else {
+			widePoolUI.draw(this.shapeRenderer);
+		}
 	}
 
 	private void renderAFishUI(Fish fish, float deltaTime) {
@@ -82,15 +88,14 @@ public class GameScreen implements Screen {
 		fishUI.update(deltaTime);
 	}
 
-	protected void renderHubControl() {
+	private void renderHubControl() {
 		batch.draw(exitButtonTexture, 0, 0);
 		batch.draw(addFishButtonTexture, 64, 0);
 		if (worldController.isShowSelectFishButtons())
 			batch.draw(selectFishButtonsTexture, 0, AppConst.height - 100, 480,
 					100);
 		if (worldController.isShowSelectTrajectoryButtons())
-			batch.draw(selectTrajectoryButtonTexture, 0,
-					AppConst.height - 100,
+			batch.draw(selectTrajectoryButtonTexture, 0, AppConst.height - 100,
 					selectTrajectoryButtonTexture.getWidth(),
 					selectTrajectoryButtonTexture.getHeight());
 	}
@@ -107,19 +112,21 @@ public class GameScreen implements Screen {
 		this.addFishButtonTexture = gameAssets.getAddFishButtonTexture();
 		this.selectFishButtonsTexture = gameAssets
 				.getSelectFishButtonsTexture();
-		this.selectTrajectoryButtonTexture = gameAssets.getSelectTrajectoryButtonTexture();
-		this.defaultFont = Assets.instance.gameScreen.getDefaultFont();
+		this.selectTrajectoryButtonTexture = gameAssets
+				.getSelectTrajectoryButtonTexture();
+		this.defaultFont = Assets.instance.assetFonts.getDefaultFont();
 		createInputprocessors();
 		setDefaultInputProcessor();
 	}
 
-	protected void createInputprocessors() {
+	private void createInputprocessors() {
 		this.defaultInputProcessor = new GSDefaultInputProcessor(
 				worldController);
 		this.selectFishInputProcessor = new GSSelectFishInputProcessor(
 				worldController);
 		this.selectTrajectoryInputProcessor = new GSSelectTrajectoryInputProcessor(
 				worldController);
+		this.settingInputProcessor = new GSSettingInputProcessor(worldController, widePoolUI);
 	}
 
 	private void setDefaultInputProcessor() {
@@ -156,5 +163,9 @@ public class GameScreen implements Screen {
 
 	public InputProcessor getSelectTrajectoryInputProcessor() {
 		return selectTrajectoryInputProcessor;
+	}
+
+	public InputProcessor getSettingInputProcessor() {
+		return settingInputProcessor;
 	}
 }

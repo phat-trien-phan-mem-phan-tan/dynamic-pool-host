@@ -1,15 +1,14 @@
 package vn.edu.hust.student.dynamicpool.presentation.screen;
 
 import vn.edu.hust.student.dynamicpool.presentation.WorldController;
-import vn.edu.hust.student.dynamicpool.utils.AppConst;
 
 import com.badlogic.gdx.InputProcessor;
 
-public class GSDefaultInputProcessor implements InputProcessor {
+public class ErrorInputProcessor implements InputProcessor {
 
 	protected WorldController worldController;
 
-	public GSDefaultInputProcessor(WorldController worldController) {
+	public ErrorInputProcessor(WorldController worldController) {
 		this.worldController = worldController;
 	}
 
@@ -35,19 +34,8 @@ public class GSDefaultInputProcessor implements InputProcessor {
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		if (isClickOnExitButton(screenX, screenY))
-			worldController.exit();
-		if (isClickOnAddFishButton(screenX, screenY))
-			worldController.addFishButtonClick();
+		worldController.exit();
 		return false;
-	}
-	
-	private boolean isClickOnExitButton(int screenX, int screenY) {
-		return screenX >= 0 && screenX < 64 && screenY > AppConst.height-64 && screenY <= AppConst.height;
-	}
-
-	private boolean isClickOnAddFishButton(int screenX, int screenY) {
-		return screenX >= 64 && screenX < 128 && screenY > AppConst.height - 64 && screenY <= AppConst.height;
 	}
 
 	@Override
@@ -64,5 +52,4 @@ public class GSDefaultInputProcessor implements InputProcessor {
 	public boolean scrolled(int amount) {
 		return false;
 	}
-
 }

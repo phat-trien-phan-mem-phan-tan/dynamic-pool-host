@@ -1,4 +1,7 @@
-package vn.edu.hust.student.dynamicpool.bll.model;
+package vn.edu.hust.student.dynamicpool.bll.model.host;
+
+import vn.edu.hust.student.dynamicpool.bll.model.Boundary;
+import vn.edu.hust.student.dynamicpool.bll.model.DeviceInfo;
 
 public class PoolConverter {
 	private static final int MUL = 10;

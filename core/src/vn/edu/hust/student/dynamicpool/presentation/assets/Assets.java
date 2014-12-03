@@ -10,7 +10,7 @@ public class Assets implements Disposable, AssetErrorListener {
 	private AssetManager assetManager;
 	public AssetSplashScreen splashScreen = new AssetSplashScreen();
 	public AssetMainMenuScreen mainMenuScreen = new AssetMainMenuScreen();
-	public AssetLoadingScreen loadingScreen = new AssetLoadingScreen();
+	public AssetLoadFonts assetFonts = new AssetLoadFonts();
 	public AssetGameScreen gameScreen = new AssetGameScreen();
 
 	private Assets() {
@@ -36,9 +36,9 @@ public class Assets implements Disposable, AssetErrorListener {
 	}
 
 	public void initLoadingAssets() {
-		loadingScreen.load(assetManager);
+		assetFonts.load(assetManager);
 		assetManager.finishLoading();
-		loadingScreen.bind(assetManager);
+		assetFonts.bind(assetManager);
 	}
 
 	public void initGameAssets() {

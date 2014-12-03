@@ -1,14 +1,10 @@
-package vn.edu.hust.student.dynamicpool.exception;
+package vn.edu.hust.student.dynamicpool.exeption;
 
 import java.io.PrintStream;
 import java.io.PrintWriter;
 
 public class BLLException extends Exception{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6011275623031391130L;
 	private String key;
 	
 	

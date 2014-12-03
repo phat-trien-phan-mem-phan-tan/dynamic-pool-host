@@ -4,5 +4,6 @@ public enum EDirection {
 	RIGHT,
 	TOP,
 	LEFT,
-	BOTTOM
+	BOTTOM,
+	UNKNOWN
 }

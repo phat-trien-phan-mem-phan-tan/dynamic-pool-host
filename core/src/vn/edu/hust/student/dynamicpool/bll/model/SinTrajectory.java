@@ -21,7 +21,7 @@ public class SinTrajectory extends Trajectory {
 	}
 
 	public SinTrajectory(Point location) {
-		super(location);
+		super();
 		y0 = location.getY();
 	}
 	
@@ -56,31 +56,37 @@ public class SinTrajectory extends Trajectory {
 		this.y0 = y0;
 	}
 
+	@Override
 	@JSON(include=false)
 	public ETrajectoryType getTrajectoryType() {
 		return ETrajectoryType.SIN;
 	}
 
-	public Point updateLocation(float deltaTime) {
+	@Override
+	@JSON(include=false)
+	public Point updateLocation(Point location, float deltaTime) {
 		increaseTimeState(deltaTime);
-		float x = getLocation().getX() + dx * deltaTime;
+		float x = location.getX() + dx * deltaTime;
 		float y = (float) (y0 + a * Math.sin(getTimeState()));
-		setLocation(x, y);
-		return getLocation();
+		location.setLocation(x, y);
+		return location;
 	}
 
-	public void changeDirection(EDirection direction) {
+	@Override
+	@JSON(include=false)
+	public void changeDirection(Point location, EDirection direction) {
 		switch (direction) {
 		case LEFT:
 		case RIGHT:
 			dx = -dx;
-			y0 = 2 * getLocation().getY() - y0;
+			y0 = 2 * location.getY() - y0;
 			setTimeState(-getTimeState());
 			break;
 		case TOP:
 		case BOTTOM:
-		default:
 			increaseTimeState(Math.PI);
+			break;
+		default:
 			break;
 		}
 	}
@@ -90,13 +96,15 @@ public class SinTrajectory extends Trajectory {
 		return dx < 0 ? EDirection.LEFT : EDirection.RIGHT;
 	}
 
+	@JSON(include=false)
 	public Trajectory clone() {
-		SinTrajectory t = new SinTrajectory(this.getLocation());
+		SinTrajectory t = new SinTrajectory();
 		t.init(a, dx, y0);
 		t.setTimeState(getTimeState());
 		return t;
 	}
 	
+	@JSON(include=false)
 	public boolean equals(SinTrajectory t) {
 		return this.a == t.a && this.dx == t.dx && this.y0 == y0 && super.equals(t);
 	}

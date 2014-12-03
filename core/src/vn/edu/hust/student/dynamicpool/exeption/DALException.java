@@ -1,4 +1,4 @@
-package vn.edu.hust.student.dynamicpool.exception;
+package vn.edu.hust.student.dynamicpool.exeption;
 
 public class DALException extends Exception {
 	/**

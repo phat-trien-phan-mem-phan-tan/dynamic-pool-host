@@ -1,9 +1,12 @@
 package vn.edu.hust.student.dynamicpool.events;
 
 import java.lang.reflect.InvocationTargetException;
+
 import com.eposi.eventdriven.Event;
-import com.eposi.eventdriven.exceptions.*;
-import com.eposi.eventdriven.implementors.*;
+import com.eposi.eventdriven.exceptions.InvalidHandlerMethod;
+import com.eposi.eventdriven.exceptions.NoContextToExecute;
+import com.eposi.eventdriven.implementors.BaseEventDispatcher;
+import com.eposi.eventdriven.implementors.BaseEventListener;
 
 public class EventDestination {
 	private BaseEventDispatcher eventDispatcher = new BaseEventDispatcher();
@@ -30,15 +33,25 @@ public class EventDestination {
 	}
 
 	private void dispatchEvent(EventType eventType, boolean isSuccess, Object targetObject, Exception error) {
-		try {
 			EventResult eventResult = new EventResult(isSuccess, targetObject, error);
-			eventDispatcher.dispatchEvent(new Event(eventType.toString(), eventResult));
-		} catch (InvocationTargetException | IllegalAccessException
-				| NoSuchMethodException | InvalidHandlerMethod
-				| NoContextToExecute e) {
-			System.err.println(EventDestination.class.toString() + " "
-					+ e.getMessage());
-		}
+			try {
+				eventDispatcher.dispatchEvent(new Event(eventType.toString(), eventResult));
+			} catch (InvocationTargetException e) {
+				System.err.println(EventDestination.class.toString() + " "
+						+ e.getMessage());
+			} catch (IllegalAccessException e) {
+				System.err.println(EventDestination.class.toString() + " "
+						+ e.getMessage());
+			} catch (NoSuchMethodException e) {
+				System.err.println(EventDestination.class.toString() + " "
+						+ e.getMessage());
+			} catch (InvalidHandlerMethod e) {
+				System.err.println(EventDestination.class.toString() + " "
+						+ e.getMessage());
+			} catch (NoContextToExecute e) {
+				System.err.println(EventDestination.class.toString() + " "
+						+ e.getMessage());
+			}
 	}
 	
 	public void dispatchFailEvent(EventType eventType) {
@@ -62,7 +75,7 @@ public class EventDestination {
 			return ((EventResult)event.getTarget()).isSuccess();
 		}
 		try {
-			boolean isSuccess = (boolean) event.getTarget();
+			boolean isSuccess = Boolean.parseBoolean(event.getTarget().toString());
 			return isSuccess;
 		} catch (Exception e) {
 			return false;

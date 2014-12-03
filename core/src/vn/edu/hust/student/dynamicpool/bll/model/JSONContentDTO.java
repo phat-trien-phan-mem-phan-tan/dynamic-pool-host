@@ -1,11 +1,7 @@
-package vn.edu.hust.student.dynamicpool.dal.dto;
+package vn.edu.hust.student.dynamicpool.bll.model;
 
 import java.util.ArrayList;
 
-import vn.edu.hust.student.dynamicpool.bll.model.ClientSetting;
-import vn.edu.hust.student.dynamicpool.bll.model.FishPackage;
-import vn.edu.hust.student.dynamicpool.bll.model.Fish;
-import vn.edu.hust.student.dynamicpool.bll.model.Segment;
 import flexjson.JSON;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;

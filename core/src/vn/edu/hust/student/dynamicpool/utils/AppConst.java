@@ -1,11 +1,8 @@
 package vn.edu.hust.student.dynamicpool.utils;
 
 public class AppConst {
-	// Chieu rong khung hinh
-    public static final float VIEWPORT_WIDTH = 1f;
-    // Chieu cao khung hinh
-    public static final float VIEWPORT_HEIGHT = 1f;
-    
+    public static float VIEWPORT_WIDTH = 0f;
+    public static float VIEWPORT_HEIGHT = 0f;
     public static final String RIGHT_FISH_1_TEXTURE = "fish1.png";
 	public static final String LEFT_FISH_1_TEXTURE = "fish1_2.png";
 	public static final String RIGHT_FISH_2_TEXTURE = "fish2.png";
@@ -33,10 +30,17 @@ public class AppConst {
 	public static final float DELAY_TIME = 2f;
 	public static final String MAIN_MEMU_BACKGROUND_TEXTURE = "mainmenubg.png";
 	public static final String CREATE_HOST_BTN_TEXTURE = "createhost.png";
+	public static final String JOIN_HOST_BTN_TEXTURE = "joinhost.png";
+	public static final String DEFAULT_HOST_NAME = "host";
 	public static final String DEFAUFT_FONT = "defaultfont.ttf";
 	public static final String LOADING_TEXT = "Loading";
-	public static final int LOADING_FONT_SIZE = 50;
-	public static final String LOADING_FONT_NAME = "size"+ LOADING_FONT_SIZE + ".ttf";
+	public static final int LARGE_FONT_SIZE = 50;
+	public static final int NORMAL_FONT_SIZE = 32;
+	public static final int SMALL_FONT_SIZE = 18;
+	public static final String SMALL_FONT_NAME = "size"+ SMALL_FONT_SIZE + ".ttf";
+	public static final String DEFAULT_FONT_NAME = "size"+ NORMAL_FONT_SIZE + ".ttf";
+	public static final String LARGE_FONT_NAME = "size"+ LARGE_FONT_SIZE + ".ttf";
+	public static final String ERROR_TITLE_TEXT = "App Error :(";
 	public static final String EXIT_BUTTON_TEXTURE = "exit-btn.png";
 	public static final String SELECT_FISH_BUTTONS_TEXTURE = "create-fish-buttons.png";
 	public static final String ADD_FISH_BUTTON_TEXTURE = "add-fish.png";
@@ -61,10 +65,6 @@ public class AppConst {
 	public static final int FISH_NINE_HEIGHT = 49;
 	public static final int FISH_TEN_WIDTH = 40;
 	public static final int FISH_TEN_HEIGHT = 25;
-	public static final String REGISTER_EVENT_NAME = "RegisterClient";
-	public static final String DEFAULT_HOST_NAME = "host";
-	public static final int KEY_FONT_SIZE = 14;
-	public static final String KEY_FONT_NAME = "size"+ KEY_FONT_SIZE + ".ttf";
 	public static int width = 800;
 	public static int height = 480;
 	

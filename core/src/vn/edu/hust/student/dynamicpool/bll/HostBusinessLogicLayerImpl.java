@@ -8,10 +8,11 @@ import org.slf4j.LoggerFactory;
 import vn.edu.hust.student.dynamicpool.bll.model.DeviceInfo;
 import vn.edu.hust.student.dynamicpool.bll.model.ETrajectoryType;
 import vn.edu.hust.student.dynamicpool.bll.model.Fish;
+import vn.edu.hust.student.dynamicpool.bll.model.FishFactory;
 import vn.edu.hust.student.dynamicpool.bll.model.FishPackage;
 import vn.edu.hust.student.dynamicpool.bll.model.FishType;
-import vn.edu.hust.student.dynamicpool.bll.model.HostPoolManager;
 import vn.edu.hust.student.dynamicpool.bll.model.Pool;
+import vn.edu.hust.student.dynamicpool.bll.model.host.HostPoolManager;
 import vn.edu.hust.student.dynamicpool.dal.HostDataAccessLayerImpl;
 import vn.edu.hust.student.dynamicpool.events.EventDestination;
 import vn.edu.hust.student.dynamicpool.events.EventType;
@@ -68,13 +69,13 @@ public class HostBusinessLogicLayerImpl {
 					EventType.BLL_CREATE_HOST);
 		} else {
 			logger.error("cannot create host");
-			EventDestination.getInstance().dispatchFailEvent(
-					EventType.BLL_CREATE_HOST);
+			EventDestination.getInstance().dispatchSuccessEventWithObject(
+					EventType.APP_ERROR, "cannot start host, please close running hosts");
 		}
 	}
 
 	private void saveKey(String keyOfHost) {
-		this.key  = keyOfHost;
+		this.key = keyOfHost;
 	}
 
 	@Deprecated
@@ -90,15 +91,9 @@ public class HostBusinessLogicLayerImpl {
 						deviceInfo.getClientName());
 				Pool pool = new Pool(deviceInfo);
 				hostPoolManager.addPool(pool);
-				if (hostPoolManager.size() == 1) {
-					dataAccessLayer.updateSettingToClient(
-							deviceInfo.getClientName(), pool);
-				} else {
-					EventDestination.getInstance().dispatchSuccessEvent(
-							EventType.BLL_ADD_DEVICE);
-					logger.debug("sent add device envent to all client");
-					sendUpdateSettingForAllClient();
-				}
+				logger.debug("begin setting");
+				EventDestination.getInstance().dispatchSuccessEventWithObject(
+						EventType.BLL_BEGIN_SETTING, pool);
 				return;
 			}
 			logger.error("cannot add device: target object is not an instance of DiviceInfo");
@@ -107,7 +102,7 @@ public class HostBusinessLogicLayerImpl {
 		}
 	}
 
-	private void sendUpdateSettingForAllClient() {
+	public void saveUpdateSettingForAllClient() {
 		for (Pool pool : hostPoolManager.getPools()) {
 			String clientName = pool.getDeviceInfo().getClientName();
 			Pool poolForClient = hostPoolManager.getPoolForClient(clientName);
@@ -126,8 +121,9 @@ public class HostBusinessLogicLayerImpl {
 			Object fishPackageObject = EventDestination
 					.parseEventToTargetObject(event);
 			if (fishPackageObject instanceof FishPackage) {
-				FishPackage fishPackage = (FishPackage)fishPackageObject;
-				hostPoolManager.addFish(fishPackage.getClientName(), fishPackage.getFish());
+				FishPackage fishPackage = (FishPackage) fishPackageObject;
+				hostPoolManager.addFish(fishPackage.getClientName(),
+						fishPackage.getFish());
 			}
 		}
 	}
@@ -138,10 +134,8 @@ public class HostBusinessLogicLayerImpl {
 			Object fishPackageObject = EventDestination
 					.parseEventToTargetObject(event);
 			if (fishPackageObject instanceof FishPackage) {
-				FishPackage fishPackage = (FishPackage)fishPackageObject;
-				Fish fishForClient = hostPoolManager.getFishForClient(fishPackage.getFish(), fishPackage.getClientName());
-				if (fishForClient == null) return;
-				dataAccessLayer.respondCreateFishRequest(fishPackage.getClientName(), true, fishForClient);				
+				FishPackage fishPackage = (FishPackage) fishPackageObject;
+				dataAccessLayer.sendFishToAClient(fishPackage);
 			}
 		}
 	}
@@ -155,16 +149,22 @@ public class HostBusinessLogicLayerImpl {
 	}
 
 	public void exit() {
-		
+		dataAccessLayer.exit();
 	}
 
 	public void createFish(FishType fishType, ETrajectoryType trajectoryType,
 			int with, int height) {
-		
+		Fish fish = FishFactory.createFishWithTrajectoryType(fishType,
+				trajectoryType, with, height);
+		hostPoolManager.addFish(fish);
 	}
 
 	public String getKeyOfHost() {
 		return this.key;
+	}
+
+	public void updateDeviceInfo(int width, int height, float screenSize) {
+		hostPoolManager.updateWidthAndHeight(width, height, screenSize);
 	}
 
 }

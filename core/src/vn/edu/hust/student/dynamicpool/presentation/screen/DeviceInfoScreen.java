@@ -27,10 +27,11 @@ public class DeviceInfoScreen implements Screen {
 				EventType.PRS_ENTER_SCREEN_SIZE,
 				new BaseEventListener(this, "onEnterScreenSizeCallbackHander"));
 	}
-	
+
 	public void onEnterScreenSizeCallbackHander(Event event) {
 		if (EventDestination.parseEventToBoolean(event)) {
-			String text = EventDestination.parseEventToTargetObject(event).toString();
+			String text = EventDestination.parseEventToTargetObject(event)
+					.toString();
 			enterScreenSizeCallbakHander(text);
 		} else {
 			showTextInputWithRequireMessage();
@@ -38,9 +39,10 @@ public class DeviceInfoScreen implements Screen {
 	}
 
 	private void showTextInputWithRequireMessage() {
-		Gdx.input.getTextInput(new EnterScreenSizeInputListener(), "You must enter your screen size (by inch)", "0");
+		Gdx.input.getTextInput(new EnterScreenSizeInputListener(),
+				"You must enter your screen size (by inch)", "0");
 	}
-	
+
 	private void enterScreenSizeCallbakHander(String text) {
 		if (worldController.isValidScreenSize(text)) {
 			worldController.enterScreenSizeDone();
@@ -48,15 +50,19 @@ public class DeviceInfoScreen implements Screen {
 			showTextInputInvalidMessage();
 		}
 	}
-	
+
 	private void showTextInputInvalidMessage() {
-		Gdx.input.getTextInput(new EnterScreenSizeInputListener(), "You must enter a valid number for screen size (by inch [0, 30])", "0");
+		Gdx.input
+				.getTextInput(
+						new EnterScreenSizeInputListener(),
+						"You must enter a valid number for screen size (by inch [0, 30])",
+						"0");
 	}
 
 	@Override
 	public void render(float delta) {
 		worldRenderer.beginRender();
-		
+
 		worldRenderer.endRender();
 	}
 
@@ -65,16 +71,15 @@ public class DeviceInfoScreen implements Screen {
 		worldRenderer.resize(width, height);
 	}
 
-	
 	@Override
 	public void show() {
-		Gdx.input.getTextInput(new EnterScreenSizeInputListener(), "Please enter your screen size (by inch)", "0");
+		Gdx.input.getTextInput(new EnterScreenSizeInputListener(),
+				"Please enter your screen size (by inch)", "0");
 	}
-
 
 	@Override
 	public void hide() {
-		
+
 	}
 
 	@Override

@@ -1,16 +1,31 @@
-package vn.edu.hust.student.dynamicpool.bll.model;
+package vn.edu.hust.student.dynamicpool.bll.model.host;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import vn.edu.hust.student.dynamicpool.bll.model.Boundary;
+import vn.edu.hust.student.dynamicpool.bll.model.DeviceInfo;
+import vn.edu.hust.student.dynamicpool.bll.model.EDirection;
+import vn.edu.hust.student.dynamicpool.bll.model.Fish;
+import vn.edu.hust.student.dynamicpool.bll.model.FishPackage;
+import vn.edu.hust.student.dynamicpool.bll.model.FishState;
+import vn.edu.hust.student.dynamicpool.bll.model.Point;
+import vn.edu.hust.student.dynamicpool.bll.model.Pool;
+import vn.edu.hust.student.dynamicpool.bll.model.PoolManager;
+import vn.edu.hust.student.dynamicpool.bll.model.Segment;
 import vn.edu.hust.student.dynamicpool.events.EventDestination;
 import vn.edu.hust.student.dynamicpool.events.EventType;
+import vn.edu.hust.student.dynamicpool.utils.AppConst;
 
 public class HostPoolManager implements PoolManager {
 	private List<Pool> pools = new ArrayList<Pool>();
 	private List<Fish> fishes = new ArrayList<Fish>();
+	private Pool mainPool = new Pool();
+	private Pool activedPool = null;
+	private List<Pool> tempPools = new ArrayList<Pool>();
 
 	public HostPoolManager() {
+		this.pools.add(mainPool);
 	}
 
 	public List<Pool> getPools() {
@@ -21,7 +36,7 @@ public class HostPoolManager implements PoolManager {
 		Point location = getDefaultLocation(pool);
 		pool.getBoundary().setLocation(location);
 		pools.add(pool);
-		calculate();
+		initTempPools(pool);
 	}
 
 	private Point getDefaultLocation(Pool poolServer) {
@@ -32,18 +47,24 @@ public class HostPoolManager implements PoolManager {
 		}
 		return new Point(x, y);
 	}
-
-	public void clear() {
-		pools.clear();
+	
+	private void initTempPools(Pool activePool) {
+		tempPools.clear();
+		for (Pool pool : pools) {
+			Pool clone = pool.clone();
+			tempPools.add(clone);
+			if (pool.equals(activePool)) this.activedPool = clone;
+		}
 	}
 
-	public int size() {
-		return this.pools.size();
+	public int fishCount() {
+		return this.fishes.size();
 	}
 
 	public void calculate() {
-		FindCommonEdgeFunction.test(pools);
+//		FindCommonEdgeFunction.test(pools);
 		// FindCommonEdgeFunction.findCommonEdge(this.pools);
+		FindCommonEdgeFunction.calucalteCommonEdge(tempPools);
 	}
 
 	@Override
@@ -62,10 +83,7 @@ public class HostPoolManager implements PoolManager {
 		for (Fish fish : fishes) {
 			switch (fish.getFishState()) {
 			case INSIDE:
-				String neighbour = detectCollisionForInsideFish(fish);
-				if (neighbour != null) {
-					
-				}
+				detectCollisionForInsideFish(fish);
 				break;
 			case OUTSIDE:
 			case PASSING:
@@ -73,81 +91,87 @@ public class HostPoolManager implements PoolManager {
 			default:
 				if (fish.isInside()) {
 					fish.setFishState(FishState.INSIDE);
+					fish.setPassingDirection(EDirection.UNKNOWN);
 				}
 				break;
 			}
 		}
 	}
 
-	private String detectCollisionForInsideFish(Fish fish) {
+	private void detectCollisionForInsideFish(Fish fish) {
 		Boundary fishBoundary = fish.getBoundary();
 		Pool pool = fish.getPool();
-		if (pool == null) return null;
+		if (pool == null)
+			return;
 		Boundary poolBoundary = pool.getBoundary();
 		if (fishBoundary.getMinX() <= poolBoundary.getMinX()) {
-			return hitLeft(pool, fish);
+			hitLeft(pool, fish);
 		} else if (fishBoundary.getMaxX() >= poolBoundary.getMaxX()) {
-			return hitRight(pool, fish);
+			hitRight(pool, fish);
 		} else if (fishBoundary.getMinY() <= poolBoundary.getMinY()) {
-			return hitBottom(pool, fish);
+			hitBottom(pool, fish);
 		} else if (fishBoundary.getMaxY() >= poolBoundary.getMaxY()) {
-			return hitTop(pool, fish);
+			hitTop(pool, fish);
 		}
-		return null;
 	}
 
-	private String hitLeft(Pool pool, Fish fish) {
+	private void hitLeft(Pool pool, Fish fish) {
 		Segment segment = pool.detectCollisionLeftSegments(fish.getBoundary());
 		fish.setFishState(FishState.RETURN);
 		if (segment == null) {
-			fish.getTrajectory().changeDirection(EDirection.LEFT);
-			return null;
+			fish.changeDirection(EDirection.LEFT);
 		} else {
+			fish.setPassingDirection(EDirection.LEFT);
 			movingOverNeighbourPool(fish, segment);
-			return segment.getNeighbourClientName();
 		}
 	}
 
-	private String hitRight(Pool pool, Fish fish) {
+	private void hitRight(Pool pool, Fish fish) {
 		Segment segment = pool.detectCollisionRightSegments(fish.getBoundary());
 		fish.setFishState(FishState.RETURN);
 		if (segment == null) {
-			fish.getTrajectory().changeDirection(EDirection.RIGHT);
-			return null;
+			fish.changeDirection(EDirection.RIGHT);
 		} else {
+			fish.setPassingDirection(EDirection.RIGHT);
 			movingOverNeighbourPool(fish, segment);
-			return segment.getNeighbourClientName();
 		}
 	}
 
-	private String hitBottom(Pool pool, Fish fish) {
+	private void hitBottom(Pool pool, Fish fish) {
 		Segment segment = pool
 				.detectCollisionBottomSegments(fish.getBoundary());
 		fish.setFishState(FishState.RETURN);
 		if (segment == null) {
-			fish.getTrajectory().changeDirection(EDirection.BOTTOM);
-			return null;
+			fish.changeDirection(EDirection.BOTTOM);
 		} else {
+			fish.setPassingDirection(EDirection.BOTTOM);
 			movingOverNeighbourPool(fish, segment);
-			return segment.getNeighbourClientName();
 		}
 	}
 
-	private String hitTop(Pool pool, Fish fish) {
+	private void hitTop(Pool pool, Fish fish) {
 		Segment segment = pool.detectCollisionTopSegments(fish.getBoundary());
 		fish.setFishState(FishState.RETURN);
 		if (segment == null) {
-			fish.getTrajectory().changeDirection(EDirection.TOP);
-			return null;
+			fish.changeDirection(EDirection.TOP);
 		} else {
+			fish.setPassingDirection(EDirection.TOP);
 			movingOverNeighbourPool(fish, segment);
-			return segment.getNeighbourClientName();
 		}
 	}
 
 	private void movingOverNeighbourPool(Fish fish, Segment segment) {
+		Pool pool = getPool(segment.getNeighbourClientName());
+		if (pool == null) {
+			this.fishes.remove(fish);
+			return;
+		}
+		fish.setPool(pool);
+		Fish cloneFish = fish.clone();
+		cloneFish.increaseLocation(-pool.getBoundary().getMinX(), -pool
+				.getBoundary().getMinY());
 		FishPackage fishPackage = new FishPackage(
-				segment.getNeighbourClientName(), fish);
+				segment.getNeighbourClientName(), cloneFish);
 		EventDestination.getInstance().dispatchSuccessEventWithObject(
 				EventType.BLL_SEND_FISH, fishPackage);
 	}
@@ -157,6 +181,7 @@ public class HostPoolManager implements PoolManager {
 		if (pool != null) {
 			fish.increaseLocation(pool.getBoundary().getMinX(), pool
 					.getBoundary().getMinY());
+			fish.setPool(pool);
 			fishes.add(fish);
 		}
 	}
@@ -184,19 +209,48 @@ public class HostPoolManager implements PoolManager {
 		return clientPool;
 	}
 
-	public Fish getFishForClient(Fish fish, String clientName) {
-		if (fish == null)
-			return null;
-		Pool pool = getPool(clientName);
-		if (pool == null)
-			return null;
-		Fish newFish = fish.clone();
-		Boundary poolBoundary = pool.getBoundary();
-		fish.increaseLocation(-poolBoundary.getMinX(), -poolBoundary.getMinY());
-		return newFish;
-	}
-
 	public List<Fish> getFishes() {
 		return fishes;
+	}
+
+	public void addFish(Fish fish) {
+		fish.setPool(mainPool);
+		fishes.add(fish);
+	}
+
+	public void updateWidthAndHeight(int width, int height, float screenSize) {
+		this.mainPool.getBoundary().setWidth(width);
+		this.mainPool.getBoundary().setHeight(height);
+		DeviceInfo deviceInfo = new DeviceInfo(width, height, screenSize);
+		deviceInfo.setClientName(AppConst.DEFAULT_HOST_NAME);
+		this.mainPool.setDeviceInfo(deviceInfo);
+	}
+
+	
+	public Pool getActivedPool() {
+		return activedPool;
+	}
+
+	public void moveActivePool(int dx, int dy) {
+		if (activedPool == null) return;
+		this.activedPool.getBoundary().increaseLocation(dx, dy);
+		this.tempValid = 0;
+	}
+
+	private int tempValid = 0;
+	public boolean isValidSetting() {
+		if (tempValid == 1) {
+			return true;
+		} else if (tempValid == 2) {
+			return false;
+		}
+		boolean valid = FindCommonEdgeFunction.isValid(tempPools);
+		tempValid = valid ? 1:2;
+		if (valid) calculate();
+		return valid;
+	}
+
+	public List<Pool> getTempPools() {
+		return tempPools;
 	}
 }

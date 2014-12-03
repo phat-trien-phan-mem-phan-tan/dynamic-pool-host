@@ -1,54 +1,23 @@
-package vn.edu.hust.student.dynamicpool.bll.model;
+package vn.edu.hust.student.dynamicpool.bll.model.host;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.badlogic.gdx.utils.Pools;
+import vn.edu.hust.student.dynamicpool.bll.model.Boundary;
+import vn.edu.hust.student.dynamicpool.bll.model.EDirection;
+import vn.edu.hust.student.dynamicpool.bll.model.Point;
+import vn.edu.hust.student.dynamicpool.bll.model.Pool;
+import vn.edu.hust.student.dynamicpool.bll.model.Segment;
 
 public class FindCommonEdgeFunction {
-	public static void findCommonEdge(List<Pool> pools) {
-		if (pools.size() == 1) {
-			pools.get(0).getSegments().clear();
-		}
-		if (isValid(pools)) {
-
-		}
-		clearAllSegments(pools);
-		for (int i = 0; i < pools.size() - 1; i++) {
-			for (int j = i + 1; j < pools.size(); j++) {
-				if (i == j)
-					return;
-				Pool leftPool = pools.get(i);
-				Pool righPool = pools.get(j);
-				Boundary leftBoundary = leftPool.getBoundary();
-				Boundary rightBoundary = righPool.getBoundary();
-				if (leftBoundary.isPassing(rightBoundary)) {
-
-				}
-			}
-		}
-	}
-
-	private static List<Pool> cloneListPools(List<Pool> pools) {
-		List<Pool> list = new ArrayList<Pool>();
-		for (Pool pool : pools) {
-			Pool clone = (Pool) pool.clone();
-			list.add(clone);
-		}
-
-		return list;
-	}
-
 	public static List<Pool> calucalteCommonEdge(List<Pool> pools) {
-		List<Pool> list = cloneListPools(pools);
-
-		if (list.size() >= 2) {
-			for (Pool pool : list) {
+		if (pools.size() >= 2) {
+			for (Pool pool : pools) {
 				Boundary boundary = pool.getBoundary();
 				Point pointStart = new Point(0, 0);
 				Point pointEnd = new Point(0, 0);
 
-				// tìm bên phải
+				// right
 				System.out.println("------------Right---------------");
 				pointStart = new Point(boundary.getMinX(), boundary.getMinY());
 				pointEnd = new Point(boundary.getMinX(), boundary.getMaxY());
@@ -56,7 +25,7 @@ public class FindCommonEdgeFunction {
 						.println("start: " + pointStart + " end: " + pointEnd);
 
 				// lặp tìm trong các pool còn lại
-				for (Pool nearPool : list) {
+				for (Pool nearPool : pools) {
 					if (!nearPool.equals(pool)) {
 						// lấy cạnh bên phải
 						Boundary nearPoolBoundary = nearPool.getBoundary();
@@ -97,7 +66,7 @@ public class FindCommonEdgeFunction {
 						.println("start: " + pointStart + " end: " + pointEnd);
 
 				// lặp tìm trong các pool còn lại
-				for (Pool nearPool : list) {
+				for (Pool nearPool : pools) {
 					if (!nearPool.equals(pool)) {
 						// lấy cạnh bên dưới
 						Boundary nearPoolBoundary = nearPool.getBoundary();
@@ -136,11 +105,10 @@ public class FindCommonEdgeFunction {
 				}
 			}
 		}
-
-		return list;
+		return pools;
 	}
 
-	public static List<Point> getPointOnCommonEdge(Point srcPointStart,
+	private static List<Point> getPointOnCommonEdge(Point srcPointStart,
 			Point srcPointEnd, Point tarPointStart, Point tarPointEnd) {
 		List<Point> list = new ArrayList<Point>();
 		Point start = new Point();
@@ -204,28 +172,17 @@ public class FindCommonEdgeFunction {
 		}
 	}
 
-	public static List<Pools> getListPoolsWithout(List<Pool> list, Pool pool) {
-		return null;
-	}
-
-	public static List<Pools> findPoolsHave1CommonEdge(Pool pool, Point start,
-			Point end) {
-		return null;
-	}
-
-	private static boolean isValid(List<Pool> pools) {
+	public static boolean isValid(List<Pool> pools) {
 		for (int i = 0; i < pools.size() - 1; i++) {
 			for (int j = i + 1; j < pools.size(); j++) {
-
+				Boundary boundary = pools.get(i).getBoundary();
+				Boundary containerBoundary = pools.get(j).getBoundary();
+				if (!boundary.isValidPoolPosition(containerBoundary)) {
+					return false;
+				}
 			}
 		}
 		return true;
-	}
-
-	private static void clearAllSegments(List<Pool> pools) {
-		for (Pool pool : pools) {
-			pool.getSegments().clear();
-		}
 	}
 
 	public static void test(List<Pool> pools) {

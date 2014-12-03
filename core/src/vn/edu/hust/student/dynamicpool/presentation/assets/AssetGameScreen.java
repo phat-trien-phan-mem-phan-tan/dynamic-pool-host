@@ -3,14 +3,7 @@ package vn.edu.hust.student.dynamicpool.presentation.assets;
 import vn.edu.hust.student.dynamicpool.utils.AppConst;
 
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.FileHandleResolver;
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
-import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
-import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoaderParameter;
 
 public class AssetGameScreen {
 	private AssetFishAnimated fish1;
@@ -27,7 +20,6 @@ public class AssetGameScreen {
 	private Texture selectFishButtonsTexture;
 	private Texture addFishButtonTexture;
 	private Texture selectTrajectoryButtonTexture;
-	private BitmapFont defaultFont;
 	
 	public AssetGameScreen() {
 		fish1 = new AssetFishAnimated(AppConst.RIGHT_FISH_1_TEXTURE, 8,
@@ -77,13 +69,6 @@ public class AssetGameScreen {
 		assetManager.load(AppConst.ADD_FISH_BUTTON_TEXTURE, Texture.class);
 		assetManager.load(AppConst.SELECT_FISH_BUTTONS_TEXTURE, Texture.class);
 		assetManager.load(AppConst.SELECT_TRAJECTORY_TEXTURE, Texture.class);
-		FileHandleResolver resolver = new InternalFileHandleResolver();
-		assetManager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
-		assetManager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
-		FreeTypeFontLoaderParameter size1Params = new FreeTypeFontLoaderParameter();
-		size1Params.fontFileName = AppConst.DEFAUFT_FONT;
-		size1Params.fontParameters.size =  AppConst.KEY_FONT_SIZE;
-		assetManager.load(AppConst.KEY_FONT_NAME, BitmapFont.class, size1Params);
 	}
 	
 	public void bind(AssetManager assetManager) {
@@ -101,7 +86,6 @@ public class AssetGameScreen {
 		addFishButtonTexture = assetManager.get(AppConst.ADD_FISH_BUTTON_TEXTURE);
 		selectFishButtonsTexture = assetManager.get(AppConst.SELECT_FISH_BUTTONS_TEXTURE);
 		selectTrajectoryButtonTexture = assetManager.get(AppConst.SELECT_TRAJECTORY_TEXTURE);
-		defaultFont = assetManager.get(AppConst.LOADING_FONT_NAME, BitmapFont.class);
 	}
 
 	public Texture getExitButtonTexture() {
@@ -158,9 +142,5 @@ public class AssetGameScreen {
 
 	public AssetFishAnimated getFish10Asset() {
 		return fish10;
-	}
-	
-	public BitmapFont getDefaultFont() {
-		return defaultFont;
 	}
 }

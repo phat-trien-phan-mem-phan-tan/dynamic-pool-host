@@ -10,10 +10,6 @@ public class LineTrajectory extends Trajectory {
 		super();
 	}
 
-	public LineTrajectory(Point location) {
-		super(location);
-	}
-
 	@flexjson.JSON(include = false)
 	public void init(float dx, float dy) {
 		this.dx = dx;
@@ -36,7 +32,8 @@ public class LineTrajectory extends Trajectory {
 		this.dy = dy;
 	}
 
-	public void changeDirection(EDirection hitTo) {
+	@Override
+	public void changeDirection(Point location, EDirection hitTo) {
 		switch (hitTo) {
 		case TOP:
 		case BOTTOM:
@@ -44,32 +41,37 @@ public class LineTrajectory extends Trajectory {
 			break;
 		case LEFT:
 		case RIGHT:
-		default:
 			dx = -dx;
+			break;
+		default:
 			break;
 		}
 	}
 
+	@Override
 	@JSON(include=false)
 	public ETrajectoryType getTrajectoryType() {
 		return ETrajectoryType.LINE;
 	}
 
-	public Point updateLocation(float deltaTime) {
+	@Override
+	public Point updateLocation(Point location, float deltaTime) {
 		increaseTimeState(deltaTime);
-		float x = (float) (getLocation().getX() + A * dx * deltaTime);
-		float y = (float) (getLocation().getY() + A * dy * deltaTime);
-		this.setLocation(x, y);
-		return getLocation();
+		float x = (float) (location.getX() + A * dx * deltaTime);
+		float y = (float) (location.getY() + A * dy * deltaTime);
+		location.setLocation(x, y);
+		return location;
 	}
 
+	@Override
 	@JSON(include=false)
 	public EDirection getHorizontalDirection() {
 		return dx < 0 ? EDirection.LEFT : EDirection.RIGHT;
 	}
 
+	@Override
 	public Trajectory clone() {
-		LineTrajectory t = new LineTrajectory(getLocation().clone());
+		LineTrajectory t = new LineTrajectory();
 		t.init(dx, dy);
 		t.setTimeState(getTimeState());
 		return t;

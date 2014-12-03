@@ -4,16 +4,19 @@ import java.util.List;
 
 import vn.edu.hust.student.dynamicpool.GameCenter;
 import vn.edu.hust.student.dynamicpool.bll.HostBusinessLogicLayerImpl;
+import vn.edu.hust.student.dynamicpool.bll.model.EDirection;
 import vn.edu.hust.student.dynamicpool.bll.model.ETrajectoryType;
 import vn.edu.hust.student.dynamicpool.bll.model.Fish;
 import vn.edu.hust.student.dynamicpool.bll.model.FishType;
-import vn.edu.hust.student.dynamicpool.bll.model.HostPoolManager;
+import vn.edu.hust.student.dynamicpool.bll.model.host.HostPoolManager;
 import vn.edu.hust.student.dynamicpool.events.EventDestination;
 import vn.edu.hust.student.dynamicpool.events.EventType;
 import vn.edu.hust.student.dynamicpool.presentation.assets.Assets;
 import vn.edu.hust.student.dynamicpool.presentation.gameobject.FishUICollection;
 import vn.edu.hust.student.dynamicpool.presentation.gameobject.FishUIFactory;
 import vn.edu.hust.student.dynamicpool.presentation.screen.DeviceInfoScreen;
+import vn.edu.hust.student.dynamicpool.presentation.screen.ErrorInputProcessor;
+import vn.edu.hust.student.dynamicpool.presentation.screen.ErrorScreen;
 import vn.edu.hust.student.dynamicpool.presentation.screen.GameScreen;
 import vn.edu.hust.student.dynamicpool.presentation.screen.LoadingScreen;
 import vn.edu.hust.student.dynamicpool.presentation.screen.MainMenuScreen;
@@ -36,13 +39,24 @@ public class WorldController {
 	private LoadingScreen loadingScreen = null;
 	private GameScreen gameScreen = null;
 	private DeviceInfoScreen deviceInfoScreen;
+	private ErrorScreen errorScreen = null;
 	private FishUICollection fishUICollection = new FishUICollection();
 	private int addingFishStep = 0;
 	private FishType selectedFishType = FishType.FISH1;
 	private float size;
+	private boolean isShowingSetting = false;
 
 	public WorldController(GameCenter game) {
 		this.game = game;
+		this.registerEvents();
+	}
+
+	private void registerEvents() {
+		EventDestination.getInstance().addEventListener(EventType.APP_ERROR,
+				new BaseEventListener(this, "onErrorCallbackHander"));
+		EventDestination.getInstance().addEventListener(
+				EventType.BLL_BEGIN_SETTING,
+				new BaseEventListener(this, "onBeginSettingCallbackHander"));
 	}
 
 	public void init() {
@@ -103,8 +117,8 @@ public class WorldController {
 		EventDestination.getInstance().addEventListener(
 				EventType.BLL_CREATE_HOST,
 				new BaseEventListener(this, "onCreateHostCallbackHander"));
-		this.hostBusinessLogicLayer.createHost();
 		showLoadingScreen();
+		this.hostBusinessLogicLayer.createHost();
 	}
 
 	private void createHostBusinessLogicLayer() {
@@ -139,6 +153,8 @@ public class WorldController {
 
 	public void enterScreenSizeDone() {
 		showFullScreen();
+		hostBusinessLogicLayer.updateDeviceInfo(AppConst.width,
+				AppConst.height, size);
 		showGameScreen();
 	}
 
@@ -176,6 +192,7 @@ public class WorldController {
 	}
 
 	public void addFishButtonClick() {
+		if (isShowingSetting) return;
 		if (this.addingFishStep == 0) {
 			this.addingFishStep = 1;
 		} else {
@@ -224,5 +241,39 @@ public class WorldController {
 
 	public String getKey() {
 		return hostBusinessLogicLayer.getKeyOfHost();
+	}
+
+	@Deprecated
+	public void onErrorCallbackHander(Event event) {
+		if (EventDestination.parseEventToBoolean(event)) {
+			Object object = EventDestination.parseEventToTargetObject(event);
+			String errorMessage = object == null ? "App error" : object
+					.toString();
+			showErrorScreen(errorMessage);
+		}
+	}
+
+	private void showErrorScreen(String errorMessage) {
+		if (this.errorScreen == null) {
+			loadErrorScreen();
+		}
+		errorScreen.showError(errorMessage);
+		game.setScreen(errorScreen);
+		this.setGameInputProcessor(new ErrorInputProcessor(this));
+	}
+
+	private void loadErrorScreen() {
+		errorScreen = new ErrorScreen(game.getWorldRenderer());
+	}
+
+	@Deprecated
+	public void onBeginSettingCallbackHander(Event event) {
+		this.isShowingSetting = true;
+		cancelAddFish();
+		setGameInputProcessor(gameScreen.getSettingInputProcessor());
+	}
+
+	public boolean isShowingSetting() {
+		return isShowingSetting;
 	}
 }

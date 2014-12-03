@@ -18,7 +18,7 @@ public class CycleTrajectory extends Trajectory {
 	}
 
 	public CycleTrajectory(Point location) {
-		super(location);
+		super();
 		this.centerX = location.getX();
 		int randomInt = Math.abs(new Random().nextInt() % AppConst.height);
 		this.centerY = location.getY() + randomInt;
@@ -66,29 +66,38 @@ public class CycleTrajectory extends Trajectory {
 		this.d = d;
 	}
 
+	@Override
 	@JSON(include=false)
 	public ETrajectoryType getTrajectoryType() {
 		return ETrajectoryType.CYCLE;
 	}
 
-	public Point updateLocation(float deltaTime) {
+	@Override
+	public Point updateLocation(Point location, float deltaTime) {
 		increaseTimeState(deltaTime * d);
 		float x = (float) (centerX + a * Math.cos(getTimeState()));
 		float y = (float) (centerY + a * Math.sin(getTimeState()));
-		setLocation(x, y);
-		return getLocation();
+		location.setLocation(x, y);
+		return location;
+	}
+	
+	@Override
+	public void passingUpdate(Point location, float dx, float dy) {
+		centerX += dx;
+		centerY += dy;
 	}
 
-	public void changeDirection(EDirection direction) {
+	@Override
+	public void changeDirection(Point location, EDirection direction) {
 		switch (direction) {
 		case LEFT:
 		case RIGHT:
-			centerY = 2 * getLocation().getY() - centerY;
+			centerY = 2 * location.getY() - centerY;
 			setTimeState(-getTimeState());
 			break;
 		case TOP:
 		case BOTTOM:
-			centerX = 2 * getLocation().getX() - centerX;
+			centerX = 2 * location.getX() - centerX;
 			setTimeState(Math.PI - getTimeState());
 			break;
 		default:
@@ -101,9 +110,15 @@ public class CycleTrajectory extends Trajectory {
 		return Math.sin(getTimeState()) > 0 ? EDirection.LEFT
 				: EDirection.RIGHT;
 	}
+	
+	@Override
+	public void increaseLocation(Point locationBefore, float dx, float dy) {
+		centerX += dx;
+		centerY += dy;
+	}
 
 	public Trajectory clone() {
-		CycleTrajectory t = new CycleTrajectory(getLocation().clone());
+		CycleTrajectory t = new CycleTrajectory();
 		t.init(centerX, centerY, a, d);
 		t.setTimeState(this.getTimeState());
 		return t;

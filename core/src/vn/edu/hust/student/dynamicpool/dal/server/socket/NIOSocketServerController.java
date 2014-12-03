@@ -55,13 +55,16 @@ public class NIOSocketServerController extends SocketServerController implements
 		this.processorManager = new ProcessorManager();
 	}
 
-	public void start() {
+	public boolean start() {
+		int port = 9696;
 		try {
-			this.acceptor.bind(new InetSocketAddress(this.getConfig()
-					.getNetworkConfigs().get(0).getPort()));
+			port = this.getConfig().getNetworkConfigs().get(0).getPort();
+			this.acceptor.bind(new InetSocketAddress(port));
 		} catch (IOException e) {
 			e.printStackTrace();
+			return false;
 		}
+		return true;
 	}
 
 	@Override
@@ -151,11 +154,11 @@ public class NIOSocketServerController extends SocketServerController implements
 
 	@Override
 	public void sessionCreated(IoSession arg0) throws Exception {
-//		Map<String, Object> map = new HashMap<String, Object>();
-//		map.put(Field.COMMAND, Field.CONNECT);
-//		map.put(Field.SUCCESSFUL, true);
-//		String message =  json.toJSON(map);
-//		arg0.write(message);
+		// Map<String, Object> map = new HashMap<String, Object>();
+		// map.put(Field.COMMAND, Field.CONNECT);
+		// map.put(Field.SUCCESSFUL, true);
+		// String message = json.toJSON(map);
+		// arg0.write(message);
 	}
 
 	@Override

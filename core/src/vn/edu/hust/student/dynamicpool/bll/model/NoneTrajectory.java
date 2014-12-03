@@ -12,13 +12,13 @@ public class NoneTrajectory extends Trajectory {
 	}
 
 	@Override
-	public Point updateLocation(float deltaTime) {
+	public Point updateLocation(Point location, float deltaTime) {
 		increaseTimeState(deltaTime);
 		return new Point();
 	}
 
 	@Override
-	public void changeDirection(EDirection direction) {
+	public void changeDirection(Point location, EDirection direction) {
 		
 	}
 

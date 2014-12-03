@@ -1,33 +1,19 @@
 package vn.edu.hust.student.dynamicpool.bll.model;
 
+import flexjson.JSON;
+
 public abstract class Trajectory {
 	private double timeState = 0f;
-	private Point location = new Point();
 
 	public Trajectory() {
 
-	}
-
-	public Trajectory(Point localtion) {
-		this.setLocation(localtion);
-	}
-
-	public Point getLocation() {
-		return location;
-	}
-
-	public void setLocation(Point location) {
-		this.location.setLocation(location);
-	}
-
-	public void setLocation(float x, float y) {
-		location.setLocation(x, y);
 	}
 
 	public double getTimeState() {
 		return timeState;
 	}
 
+	@JSON(include=false)
 	public void increaseTimeState(double d) {
 		this.timeState += d;
 	}
@@ -35,19 +21,34 @@ public abstract class Trajectory {
 	public void setTimeState(double timeState) {
 		this.timeState = timeState;
 	}
-
+	
+	@JSON(include=false)
+	public void passingUpdate(Point location, float dx, float dy) {
+		
+	}
+	
+	@JSON(include=false)
 	public boolean equals(Trajectory t) {
-		return this.timeState == t.timeState
-				&& this.location.equals(t.location);
+		return this.timeState == t.timeState;
 	}
 
-	public abstract void changeDirection(EDirection hitTo);
+	@JSON(include=false)
+	public abstract void changeDirection(Point location, EDirection hitTo);
 
+	@JSON(include=false)
+	public abstract Point updateLocation(Point location, float deltaTime);
+
+	@JSON(include=false)
 	public abstract ETrajectoryType getTrajectoryType();
 
-	public abstract Point updateLocation(float deltaTime);
-
+	@JSON(include=false)
 	public abstract EDirection getHorizontalDirection();
 
+	@JSON(include=false)
 	public abstract Trajectory clone();
+
+	@JSON(include=false)
+	public void increaseLocation(Point locationBefore, float dx, float dy) {
+		
+	}
 }
