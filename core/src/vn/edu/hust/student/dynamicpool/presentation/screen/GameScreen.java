@@ -36,8 +36,10 @@ public class GameScreen implements Screen {
 	private InputProcessor settingInputProcessor;
 
 	private BitmapFont defaultFont;
+	private BitmapFont smallFont;
 	private WidePoolUI widePoolUI;
 	ShapeRenderer shapeRenderer = new ShapeRenderer();
+	private String message;
 
 	public GameScreen(WorldRenderer worldRenderer,
 			WorldController worldController, HostPoolManager hostPoolManager) {
@@ -54,8 +56,10 @@ public class GameScreen implements Screen {
 		renderFishsUIAndUpdate(delta);
 		renderKey();
 		renderHubControl();
+		renderMessage();
 		worldRenderer.endRender();
 		renderWidePool();
+		
 	}
 
 	private void renderFishsUIAndUpdate(float deltaTime) {
@@ -65,27 +69,18 @@ public class GameScreen implements Screen {
 		}
 		worldController.updateFishsCordinate(deltaTime);
 	}
+	
+	private void renderAFishUI(Fish fish, float deltaTime) {
+		FishUI fishUI = fishUICollection.getFishUI(fish);
+		fishUI.render(batch);
+		fishUI.update(deltaTime);
+	}
 
 	private void renderKey() {
 		String key = worldController.getKey();
 		float x = AppConst.width - 20 - defaultFont.getBounds(key).width;
 		float y = 25 + defaultFont.getBounds(key).height;
 		defaultFont.draw(batch, key, x, y);
-	}
-
-	private void renderWidePool() {
-		shapeRenderer.setProjectionMatrix(worldRenderer.getCamera().combined);
-		if (worldController.isShowingSetting()) {
-			widePoolUI.drawSetting(this.shapeRenderer);
-		} else {
-			widePoolUI.draw(this.shapeRenderer);
-		}
-	}
-
-	private void renderAFishUI(Fish fish, float deltaTime) {
-		FishUI fishUI = fishUICollection.getFishUI(fish);
-		fishUI.render(batch);
-		fishUI.update(deltaTime);
 	}
 
 	private void renderHubControl() {
@@ -98,6 +93,20 @@ public class GameScreen implements Screen {
 			batch.draw(selectTrajectoryButtonTexture, 0, AppConst.height - 100,
 					selectTrajectoryButtonTexture.getWidth(),
 					selectTrajectoryButtonTexture.getHeight());
+	}
+	
+	private void renderMessage() {
+		if (message == null) return;
+		smallFont.drawWrapped(batch, message, 25, AppConst.height-25, AppConst.width-50);
+	}
+	
+	private void renderWidePool() {
+		shapeRenderer.setProjectionMatrix(worldRenderer.getCamera().combined);
+		if (worldController.isShowingSetting()) {
+			widePoolUI.drawSetting(this.shapeRenderer);
+		} else {
+			widePoolUI.draw(this.shapeRenderer);
+		}
 	}
 
 	@Override
@@ -115,6 +124,7 @@ public class GameScreen implements Screen {
 		this.selectTrajectoryButtonTexture = gameAssets
 				.getSelectTrajectoryButtonTexture();
 		this.defaultFont = Assets.instance.assetFonts.getDefaultFont();
+		this.smallFont = Assets.instance.assetFonts.getSmallFont();
 		createInputprocessors();
 		setDefaultInputProcessor();
 	}
@@ -135,7 +145,7 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void hide() {
-
+		
 	}
 
 	@Override
@@ -167,5 +177,13 @@ public class GameScreen implements Screen {
 
 	public InputProcessor getSettingInputProcessor() {
 		return settingInputProcessor;
+	}
+	
+	public void showMessage(String updatingMessage) {
+		this.message = updatingMessage;
+	}
+	
+	public void hideMessage() {
+		this.message = null;
 	}
 }
