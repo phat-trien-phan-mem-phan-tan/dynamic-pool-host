@@ -43,9 +43,10 @@ public class HostPoolManager implements PoolManager {
 
 	private Pool fixWidthAndHeightByDPI(Pool pool) {
 		double poolDPI = getDPI(pool);
-		if (DPI == 0) DPI = poolDPI;
-		int width = (int) (mainPool.getBoundary().getWidth()*DPI/poolDPI);
-		int height = (int) (mainPool.getBoundary().getHeight()*DPI/poolDPI);
+		if (DPI == 0)
+			DPI = poolDPI;
+		int width = (int) (mainPool.getBoundary().getWidth() * DPI / poolDPI);
+		int height = (int) (mainPool.getBoundary().getHeight() * DPI / poolDPI);
 		pool.getBoundary().setWidth(width);
 		pool.getBoundary().setHeight(height);
 		return pool;
@@ -275,5 +276,26 @@ public class HostPoolManager implements PoolManager {
 
 	public List<Pool> getTempPools() {
 		return tempPools;
+	}
+
+	public void saveSetting() {
+		for (Pool pool : pools) {
+			List<Segment> segments = pool.getSegments();
+			Pool updatePool = getUpdateSegment(pool);
+			segments.clear();
+			segments.addAll(updatePool.getSegments());
+			pool.getBoundary().setLocation(updatePool.getBoundary().getMinX(),
+					updatePool.getBoundary().getMinY());
+		}
+	}
+
+	private Pool getUpdateSegment(Pool pool) {
+		String clientName = pool.getDeviceInfo().getClientName();
+		for (Pool temp : tempPools) {
+			if (clientName.equals(temp.getDeviceInfo().getClientName())) {
+				return temp;
+			}
+		}
+		return null;
 	}
 }

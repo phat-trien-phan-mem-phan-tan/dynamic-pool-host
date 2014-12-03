@@ -4,7 +4,6 @@ import java.util.List;
 
 import vn.edu.hust.student.dynamicpool.GameCenter;
 import vn.edu.hust.student.dynamicpool.bll.HostBusinessLogicLayerImpl;
-import vn.edu.hust.student.dynamicpool.bll.model.EDirection;
 import vn.edu.hust.student.dynamicpool.bll.model.ETrajectoryType;
 import vn.edu.hust.student.dynamicpool.bll.model.Fish;
 import vn.edu.hust.student.dynamicpool.bll.model.FishType;
@@ -29,6 +28,7 @@ import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.eposi.eventdriven.Event;
 import com.eposi.eventdriven.implementors.BaseEventListener;
+import com.sun.corba.se.impl.protocol.giopmsgheaders.Message;
 
 public class WorldController {
 	private Timer timer = new Timer();
@@ -192,7 +192,8 @@ public class WorldController {
 	}
 
 	public void addFishButtonClick() {
-		if (isShowingSetting) return;
+		if (isShowingSetting)
+			return;
 		if (this.addingFishStep == 0) {
 			this.addingFishStep = 1;
 		} else {
@@ -271,9 +272,51 @@ public class WorldController {
 		this.isShowingSetting = true;
 		cancelAddFish();
 		setGameInputProcessor(gameScreen.getSettingInputProcessor());
+		showSettingGuideMessage(AppConst.SETTING_GUID_TEXT);
 	}
 
 	public boolean isShowingSetting() {
 		return isShowingSetting;
+	}
+
+	public void tryUpdateSettingForClient() {
+		HostPoolManager hostPoolManager = hostBusinessLogicLayer
+				.getHostPoolManager();
+		if (hostPoolManager.isValidSetting()) {
+			showSettingGuideMessage(AppConst.SETTING_UPDATING_MESSAGE);
+			hostBusinessLogicLayer.saveUpdateSettingForAllClient();
+			timer.scheduleTask(new Task() {
+				@Override
+				public void run() {
+					showSettingGuideMessage(null);
+					hiddenSetting();
+				}
+			}, 1);
+			timer.start();
+		} else {
+			showSettingGuideMessage(AppConst.SETTING_INVALID_TEXT);
+			timer.scheduleTask(new Task() {
+				@Override
+				public void run() {
+					showSettingGuideMessage(AppConst.SETTING_GUID_TEXT);
+				}
+			}, 1);
+			timer.start();
+		}
+	}
+
+	protected void hiddenSetting() {
+		isShowingSetting = false;
+		setGameInputProcessor(gameScreen.getDefaultInputProcessor());
+	}
+
+	private void showSettingGuideMessage(String message) {
+		if (gameScreen != null) {
+			if (message == null) {
+				gameScreen.hideMessage();
+			} else {
+				gameScreen.showMessage(message);
+			}
+		}
 	}
 }

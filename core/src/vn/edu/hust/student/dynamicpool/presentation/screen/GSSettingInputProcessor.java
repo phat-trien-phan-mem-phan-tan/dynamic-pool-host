@@ -9,11 +9,12 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 
 public class GSSettingInputProcessor implements InputProcessor {
-	
+
 	private WorldController worldController;
 	private WidePoolUI widePoolUI;
 
-	public GSSettingInputProcessor(WorldController worldController, WidePoolUI widePoolUI) {
+	public GSSettingInputProcessor(WorldController worldController,
+			WidePoolUI widePoolUI) {
 		this.worldController = worldController;
 		this.widePoolUI = widePoolUI;
 	}
@@ -34,16 +35,16 @@ public class GSSettingInputProcessor implements InputProcessor {
 			widePoolUI.setLastDirectionOfMovingActivePool(EDirection.BOTTOM);
 			break;
 		case Keys.ENTER:
-			
+			worldController.tryUpdateSettingForClient();
 			break;
 		case Keys.TAB:
-			
+
 			break;
 		case Keys.SPACE:
-			
+
 			break;
 		case Keys.ESCAPE:
-			
+
 			break;
 		default:
 			break;
@@ -64,7 +65,6 @@ public class GSSettingInputProcessor implements InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -76,24 +76,22 @@ public class GSSettingInputProcessor implements InputProcessor {
 	}
 
 	private boolean isClickOnExitButton(int screenX, int screenY) {
-		return screenX >= 0 && screenX < 64 && screenY > AppConst.height-64 && screenY <= AppConst.height;
+		return screenX >= 0 && screenX < 64 && screenY > AppConst.height - 64
+				&& screenY <= AppConst.height;
 	}
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean scrolled(int amount) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

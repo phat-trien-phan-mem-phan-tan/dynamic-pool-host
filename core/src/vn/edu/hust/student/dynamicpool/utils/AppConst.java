@@ -65,6 +65,9 @@ public class AppConst {
 	public static final int FISH_NINE_HEIGHT = 49;
 	public static final int FISH_TEN_WIDTH = 40;
 	public static final int FISH_TEN_HEIGHT = 25;
+	public static final String SETTING_UPDATING_MESSAGE = "Updating changes";
+	public static final String SETTING_GUID_TEXT = "Use 4 arrows to change position\nUse ENTER to save setting\n";
+	public static final String SETTING_INVALID_TEXT = "Cannot save because setting is invalid";
 	public static int width = 800;
 	public static int height = 480;
 	

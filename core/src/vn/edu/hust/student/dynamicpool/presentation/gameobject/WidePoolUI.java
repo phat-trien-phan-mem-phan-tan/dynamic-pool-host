@@ -27,6 +27,7 @@ public class WidePoolUI {
 	private HostPoolManager hostPoolManager;
 	private ShapeRenderer shapeRenderer;
 	private EDirection movingActivePoolDirection = EDirection.UNKNOWN;
+	private String message = null;
 
 	public WidePoolUI(HostPoolManager poolManager) {
 		this.hostPoolManager = poolManager;
@@ -138,6 +139,8 @@ public class WidePoolUI {
 				boundary.getWidth(), boundary.getHeight());
 		shapeRenderer.end();
 	}
+	
+	
 
 	public void setLastDirectionOfMovingActivePool(EDirection movingDirection) {
 		this.movingActivePoolDirection = movingDirection;

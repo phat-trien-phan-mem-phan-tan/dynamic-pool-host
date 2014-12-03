@@ -103,6 +103,7 @@ public class HostBusinessLogicLayerImpl {
 	}
 
 	public void saveUpdateSettingForAllClient() {
+		hostPoolManager.saveSetting();
 		for (Pool pool : hostPoolManager.getPools()) {
 			String clientName = pool.getDeviceInfo().getClientName();
 			Pool poolForClient = hostPoolManager.getPoolForClient(clientName);
