@@ -23,6 +23,7 @@ public class HostPoolManager implements PoolManager {
 	private Pool mainPool = new Pool();
 	private Pool activedPool = null;
 	private List<Pool> tempPools = new ArrayList<Pool>();
+	private double DPI = 0f;
 
 	public HostPoolManager() {
 		this.pools.add(mainPool);
@@ -33,10 +34,21 @@ public class HostPoolManager implements PoolManager {
 	}
 
 	public void addPool(Pool pool) {
+		pool = fixWidthAndHeightByDPI(pool);
 		Point location = getDefaultLocation(pool);
 		pool.getBoundary().setLocation(location);
 		pools.add(pool);
 		initTempPools(pool);
+	}
+
+	private Pool fixWidthAndHeightByDPI(Pool pool) {
+		double poolDPI = getDPI(pool);
+		if (DPI == 0) DPI = poolDPI;
+		int width = (int) (mainPool.getBoundary().getWidth()*DPI/poolDPI);
+		int height = (int) (mainPool.getBoundary().getHeight()*DPI/poolDPI);
+		pool.getBoundary().setWidth(width);
+		pool.getBoundary().setHeight(height);
+		return pool;
 	}
 
 	private Point getDefaultLocation(Pool poolServer) {
@@ -47,13 +59,14 @@ public class HostPoolManager implements PoolManager {
 		}
 		return new Point(x, y);
 	}
-	
+
 	private void initTempPools(Pool activePool) {
 		tempPools.clear();
 		for (Pool pool : pools) {
 			Pool clone = pool.clone();
 			tempPools.add(clone);
-			if (pool.equals(activePool)) this.activedPool = clone;
+			if (pool.equals(activePool))
+				this.activedPool = clone;
 		}
 	}
 
@@ -62,7 +75,7 @@ public class HostPoolManager implements PoolManager {
 	}
 
 	public void calculate() {
-//		FindCommonEdgeFunction.test(pools);
+		// FindCommonEdgeFunction.test(pools);
 		// FindCommonEdgeFunction.findCommonEdge(this.pools);
 		FindCommonEdgeFunction.calucalteCommonEdge(tempPools);
 	}
@@ -224,20 +237,29 @@ public class HostPoolManager implements PoolManager {
 		DeviceInfo deviceInfo = new DeviceInfo(width, height, screenSize);
 		deviceInfo.setClientName(AppConst.DEFAULT_HOST_NAME);
 		this.mainPool.setDeviceInfo(deviceInfo);
+		this.DPI = getDPI(mainPool);
 	}
 
-	
+	private double getDPI(Pool pool) {
+		float width = pool.getBoundary().getWidth();
+		float screenSize = pool.getDeviceInfo().getScreenSize();
+		float height = pool.getBoundary().getHeight();
+		return Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)) / screenSize;
+	}
+
 	public Pool getActivedPool() {
 		return activedPool;
 	}
 
 	public void moveActivePool(int dx, int dy) {
-		if (activedPool == null) return;
+		if (activedPool == null)
+			return;
 		this.activedPool.getBoundary().increaseLocation(dx, dy);
 		this.tempValid = 0;
 	}
 
 	private int tempValid = 0;
+
 	public boolean isValidSetting() {
 		if (tempValid == 1) {
 			return true;
@@ -245,8 +267,9 @@ public class HostPoolManager implements PoolManager {
 			return false;
 		}
 		boolean valid = FindCommonEdgeFunction.isValid(tempPools);
-		tempValid = valid ? 1:2;
-		if (valid) calculate();
+		tempValid = valid ? 1 : 2;
+		if (valid)
+			calculate();
 		return valid;
 	}
 
