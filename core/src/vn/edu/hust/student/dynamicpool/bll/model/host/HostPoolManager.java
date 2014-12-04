@@ -216,6 +216,8 @@ public class HostPoolManager implements PoolManager {
 			return null;
 		}
 		Pool clientPool = new Pool(pool.getDeviceInfo());
+		clientPool.getBoundary().setWidth(pool.getBoundary().getWidth());
+		clientPool.getBoundary().setHeight(pool.getBoundary().getHeight());
 		clientPool.setScale(pool.getScale());
 		for (Segment segment : pool.getSegments()) {
 			Segment clientSegment = segment.clone();
