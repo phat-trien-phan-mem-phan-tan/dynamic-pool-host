@@ -27,7 +27,6 @@ public class WidePoolUI {
 	private HostPoolManager hostPoolManager;
 	private ShapeRenderer shapeRenderer;
 	private EDirection movingActivePoolDirection = EDirection.UNKNOWN;
-	private String message = null;
 
 	public WidePoolUI(HostPoolManager poolManager) {
 		this.hostPoolManager = poolManager;
@@ -48,13 +47,13 @@ public class WidePoolUI {
 			maxX = Math.max(maxX, pool.getBoundary().getMaxX());
 			maxY = Math.max(maxY, pool.getBoundary().getMaxY());
 		}
-		Boundary acturalBoundary = new Boundary(new Point(minX, maxY), maxX
-				- minX, maxY - minY);
-		convert.setActuralBoundary(acturalBoundary);
 		Boundary vituralBoundary = new Boundary(
 				new Point(AppConst.width / 4, 0), AppConst.width / 2,
 				AppConst.height / 2);
 		convert.setVituralBoundary(vituralBoundary);
+		Boundary acturalBoundary = new Boundary(new Point(minX, minY), maxX
+				- minX, maxY - minY);
+		convert.setActuralBoundary(acturalBoundary);
 	}
 
 	private void drawPoolsAndSegments(ShapeRenderer shapeRenderer, List<Pool> pools) {
