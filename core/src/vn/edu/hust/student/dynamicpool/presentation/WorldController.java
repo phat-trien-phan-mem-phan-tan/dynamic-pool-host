@@ -33,7 +33,7 @@ import com.eposi.eventdriven.implementors.BaseEventListener;
 public class WorldController {
 	private Timer timer = new Timer();
 	private GameCenter game = null;
-	private HostBusinessLogicLayerImpl hostBusinessLogicLayer = null;
+	private HostBusinessLogicLayerImpl hostBusinessLogicLayer = new HostBusinessLogicLayerImpl();;
 	private SplashScreen splashScreen = null;
 	private MainMenuScreen mainMenuScreen = null;
 	private LoadingScreen loadingScreen = null;
@@ -57,6 +57,9 @@ public class WorldController {
 		EventDestination.getInstance().addEventListener(
 				EventType.BLL_BEGIN_SETTING,
 				new BaseEventListener(this, "onBeginSettingCallbackHander"));
+		EventDestination.getInstance().addEventListener(
+				EventType.BLL_CREATE_HOST,
+				new BaseEventListener(this, "onCreateHostCallbackHander"));
 	}
 
 	public void init() {
@@ -112,16 +115,8 @@ public class WorldController {
 	}
 
 	public void createHost() {
-		createHostBusinessLogicLayer();
-		EventDestination.getInstance().addEventListener(
-				EventType.BLL_CREATE_HOST,
-				new BaseEventListener(this, "onCreateHostCallbackHander"));
 		showLoadingScreen();
 		this.hostBusinessLogicLayer.createHost();
-	}
-
-	private void createHostBusinessLogicLayer() {
-		this.hostBusinessLogicLayer = new HostBusinessLogicLayerImpl();
 	}
 
 	@Deprecated
