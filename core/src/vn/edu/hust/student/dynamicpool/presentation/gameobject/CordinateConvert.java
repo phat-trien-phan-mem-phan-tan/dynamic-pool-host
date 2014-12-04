@@ -30,31 +30,19 @@ public class CordinateConvert {
 				convertValue(boundary.getHeight()));
 	}
 
-	public Point convertLocation(Point point) {
-		Point p = convertPoint(point);
-		return new Point(p.getX()+vituralBoundary.getMinX(), p.getY()+vituralBoundary.getMinY());
+	public Point convertLocation(Point p) {
+		return new Point(convertLocationX(p.getX()), convertLocationY(p.getY()));
 	}
 	
 	public float convertValue(float value) {
 		return value * scale;
 	}
 
-	private Point convertPoint(Point point) {
-		return new Point(point.getX() * scale, point.getY() * scale);
-	}
-
-	public Boundary convertBoundaryToOriginal(Boundary boundary) {
-		Boundary b = convertBoundary(boundary);
-		b.getLocation().setX(b.getWidth()/2+b.getLocation().getX());
-		b.getLocation().setY(b.getHeight()/2+b.getLocation().getY());
-		return b;
-	}
-
 	public float convertLocationX(float value) {
-		return vituralBoundary.getMinX() + convertValue(value);
+		return vituralBoundary.getMinX() + convertValue(value) - convertValue(acturalBoundary.getMinX());
 	}
 	
 	public float convertLocationY(float value) {
-		return vituralBoundary.getMinY() + convertValue(value);
+		return vituralBoundary.getMinY() + convertValue(value) - convertValue(acturalBoundary.getMinY());
 	}
 }
