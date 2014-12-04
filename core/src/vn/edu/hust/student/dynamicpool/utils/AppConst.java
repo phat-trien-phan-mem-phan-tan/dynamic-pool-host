@@ -25,7 +25,7 @@ public class AppConst {
 	public static final String LEFT_FISH_10_TEXTURE = "fish10_2.png";
 
 	public static final String BACKGROUND_TEXTURE = "backgroundshop.png";
-	public static final float FISH_ANIMATED_DURATION = 0.25f;
+	public static final float FISH_ANIMATED_DURATION = 0.025f;
 	public static final String SPLASH_SCREEN_TEXTURE = "splashscreen.png";
 	public static final float DELAY_TIME = 2f;
 	public static final String MAIN_MEMU_BACKGROUND_TEXTURE = "mainmenubg.png";
